@@ -1,14 +1,14 @@
 package jp.co.sss.crud.util;
 
 /**
- * 定数クラス
+ * メッセージ用の定数クラス
  */
-public class Constants {
+public class ConstantMsg {
 
 	/**
 	 * インスタンス化を禁止
 	 */
-	private Constants() {
+	private ConstantMsg() {
 	}
 
 	/** システム名 */
@@ -64,7 +64,4 @@ public class Constants {
 
 	/** システム終了 */
 	public static final String SYSTEM_END = "システムを終了します。";
-
-	/** システム終了の番号 */
-	public static final int SYSTEM_END_NUMBER = 7;
 }

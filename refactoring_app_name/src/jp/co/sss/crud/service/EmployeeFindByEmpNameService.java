@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import jp.co.sss.crud.db.DBController;
-import jp.co.sss.crud.util.Constants;
+import jp.co.sss.crud.util.ConstantMsg;
 
 /**
  * 名前検索用のサービスクラス
@@ -18,7 +18,7 @@ public class EmployeeFindByEmpNameService {
 	 */
 	public static void findByName() throws ClassNotFoundException, SQLException, IOException {
 		// 社員名検索
-		System.out.print(Constants.INPUT_EMP_NAME);
+		System.out.print(ConstantMsg.INPUT_EMP_NAME);
 
 		// 検索機能の呼出
 		DBController.findByName();

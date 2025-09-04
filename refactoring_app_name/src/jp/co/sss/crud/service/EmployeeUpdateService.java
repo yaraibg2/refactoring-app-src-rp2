@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 
 import jp.co.sss.crud.db.DBController;
-import jp.co.sss.crud.util.Constants;
+import jp.co.sss.crud.util.ConstantMsg;
 
 /**
  * 更新用のサービスクラス
@@ -23,7 +23,7 @@ public class EmployeeUpdateService {
 	public static void updateEmp(BufferedReader br)
 			throws IOException, ClassNotFoundException, SQLException, ParseException {
 		// 更新する社員IDを入力
-		System.out.print(Constants.INPUT_UPDATE);
+		System.out.print(ConstantMsg.INPUT_UPDATE);
 
 		// 更新する値を入力する
 		String inputEmpId = br.readLine();
@@ -31,6 +31,6 @@ public class EmployeeUpdateService {
 
 		// 更新機能の呼出
 		DBController.update(inputEmpId);
-		System.out.println(Constants.COMPLETE_UPDATE);
+		System.out.println(ConstantMsg.COMPLETE_UPDATE);
 	}
 }

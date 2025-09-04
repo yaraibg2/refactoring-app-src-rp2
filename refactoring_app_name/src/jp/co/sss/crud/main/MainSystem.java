@@ -13,7 +13,8 @@ import jp.co.sss.crud.service.EmployeeFindByEmpNameService;
 import jp.co.sss.crud.service.EmployeeRegisterService;
 import jp.co.sss.crud.service.EmployeeService;
 import jp.co.sss.crud.service.EmployeeUpdateService;
-import jp.co.sss.crud.util.Constants;
+import jp.co.sss.crud.util.ConstantMsg;
+import jp.co.sss.crud.util.ConstantValue;
 
 /**
  * 社員情報管理システム開始クラス 社員情報管理システムはこのクラスから始まる。<br/>
@@ -67,8 +68,8 @@ public class MainSystem {
 					EmployeeDeleteService.deleteEmp();
 					break;
 				}
-			} while (menuNumber != Constants.SYSTEM_END_NUMBER);
-			System.out.println(Constants.SYSTEM_END);
+			} while (menuNumber != ConstantValue.SYSTEM_END_NUMBER);
+			System.out.println(ConstantMsg.SYSTEM_END);
 		}
 	}
 }

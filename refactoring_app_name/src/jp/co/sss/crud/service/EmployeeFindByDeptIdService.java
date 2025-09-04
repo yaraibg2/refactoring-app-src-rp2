@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import jp.co.sss.crud.db.DBController;
-import jp.co.sss.crud.util.Constants;
+import jp.co.sss.crud.util.ConstantMsg;
 
 /**
  * 主キー検索用のサービスクラス
@@ -20,7 +20,7 @@ public class EmployeeFindByDeptIdService {
 	 */
 	public static void findByDeptId(BufferedReader br) throws ClassNotFoundException, SQLException, IOException {
 		// 検索する部署IDを入力
-		System.out.print(Constants.FIND_BY_DEPT_ID);
+		System.out.print(ConstantMsg.FIND_BY_DEPT_ID);
 		String deptId = br.readLine();
 
 		// 検索機能の呼出
