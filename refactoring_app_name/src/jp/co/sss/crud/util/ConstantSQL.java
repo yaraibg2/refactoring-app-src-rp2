@@ -65,5 +65,4 @@ public class ConstantSQL {
 
 	/** 削除 */
 	public static final String SQL_DELETE = "DELETE FROM employee WHERE emp_id = ?";
-
 }

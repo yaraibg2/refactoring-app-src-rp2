@@ -6,7 +6,14 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.text.ParseException;
 
-import jp.co.sss.crud.db.DBController;
+import jp.co.sss.crud.service.EmployeeAllFindService;
+import jp.co.sss.crud.service.EmployeeDeleteService;
+import jp.co.sss.crud.service.EmployeeFindByDeptIdService;
+import jp.co.sss.crud.service.EmployeeFindByEmpNameService;
+import jp.co.sss.crud.service.EmployeeRegisterService;
+import jp.co.sss.crud.service.EmployeeService;
+import jp.co.sss.crud.service.EmployeeUpdateService;
+import jp.co.sss.crud.util.Constants;
 
 /**
  * 社員情報管理システム開始クラス 社員情報管理システムはこのクラスから始まる。<br/>
@@ -25,89 +32,43 @@ public class MainSystem {
 	 * @throws ParseException 
 	 */
 	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException, ParseException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int menuNumber = 0;
 
-		int menuNo = 0;
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+			do {
+				// メニューの表示
+				EmployeeService.showMenu();
+				// メニュー番号の入力
+				String menuNoStr = br.readLine();
+				menuNumber = Integer.parseInt(menuNoStr);
+				// 機能の呼出
+				switch (menuNumber) {
+				case 1:
+					EmployeeAllFindService.findAll();
+					break;
 
-		do {
-			// メニューの表示
-			System.out.println("=== 社員管理システム ===");
-			System.out.println("1.全件表示");
-			System.out.println("2.社員名検索");
-			System.out.println("3.部署ID検索");
-			System.out.println("4.新規登録");
-			System.out.println("5.更新");
-			System.out.println("6.削除");
-			System.out.println("7.終了");
-			System.out.print("メニュー番号を入力してください：");
+				case 2:
+					EmployeeFindByEmpNameService.findByName();
+					break;
 
-			// メニュー番号の入力
-			String menuNoStr = br.readLine();
-			menuNo = Integer.parseInt(menuNoStr);
+				case 3:
+					EmployeeFindByDeptIdService.findByDeptId(br);
+					break;
 
-			// 機能の呼出
-			switch (menuNo) {
-			case 1:
-				// 全件表示機能の呼出
-				DBController.find();
-				break;
+				case 4:
+					EmployeeRegisterService.insertEmp(br);
+					break;
 
-			case 2:
-				// 社員名検索
-				System.out.print("社員名:");
+				case 5:
+					EmployeeUpdateService.updateEmp(br);
+					break;
 
-				// 検索機能の呼出
-				DBController.findB();
-				break;
-
-			case 3:
-				// 検索する部署IDを入力
-				System.out.print("部署ID(1:営業部、2:経理部、3:総務部)を入力してください:");
-				String deptIdA = br.readLine();
-
-				// 検索機能の呼出
-				DBController.findC(deptIdA);
-				break;
-
-			case 4:
-				// 登録する値を入力
-				System.out.print("社員名:");
-				String emp_name = br.readLine();
-				System.out.print("性別(0:その他, 1:男性, 2:女性, 9:回答なし):");
-				String Seibetsu = br.readLine();
-				System.out.print("生年月日(西暦年/月/日):");
-				String birthday = br.readLine();
-				System.out.print("部署ID(1:営業部、2:経理部、3:総務部):");
-				String deptIdB = br.readLine();
-
-				// 登録機能の呼出
-				DBController.insert(emp_name, Seibetsu, birthday, deptIdB);
-				break;
-
-			case 5:
-				// 更新する社員IDを入力
-				System.out.print("更新する社員の社員IDを入力してください：");
-
-				// 更新する値を入力する
-				String empId_1 = br.readLine();
-				Integer.parseInt(empId_1);
-
-				// 更新機能の呼出
-				DBController.update(empId_1);
-				System.out.println("社員情報を更新しました");
-
-				break;
-
-			case 6:
-				// 削除する社員IDを入力
-				System.out.print("削除する社員の社員IDを入力してください：");
-
-				// 削除機能の呼出
-				DBController.delete();
-				break;
-
-			}
-		} while (menuNo != 7);
-		System.out.println("システムを終了します。");
+				case 6:
+					EmployeeDeleteService.deleteEmp();
+					break;
+				}
+			} while (menuNumber != Constants.SYSTEM_END_NUMBER);
+			System.out.println(Constants.SYSTEM_END);
+		}
 	}
 }

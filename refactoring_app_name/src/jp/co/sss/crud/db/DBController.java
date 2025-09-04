@@ -30,20 +30,11 @@ public class DBController {
 	 * @throws ClassNotFoundException ドライバクラスが不在の場合に送出
 	 * @throws SQLException           DB処理でエラーが発生した場合に送出
 	 */
-	public static void find() throws ClassNotFoundException, SQLException {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
+	public static void findAll() throws ClassNotFoundException, SQLException {
 
-		try {
-			// DBに接続
-			connection = DBManager.getConnection();
-
-			// ステートメントを作成
-			preparedStatement = connection.prepareStatement(ConstantSQL.SQL_ALL_SELECT);
-
-			// SQL文を実行
-			resultSet = preparedStatement.executeQuery();
+		try (Connection connection = DBManager.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(ConstantSQL.SQL_ALL_SELECT);
+				ResultSet resultSet = preparedStatement.executeQuery()) {
 
 			//resultSetの結果Setがない場合はfalse
 			if (!resultSet.isBeforeFirst()) {
@@ -74,15 +65,7 @@ public class DBController {
 				System.out.print(resultSet.getString("birthday") + "\t");
 				System.out.println(resultSet.getString("dept_name"));
 			}
-
 			System.out.println("");
-		} finally {
-			// ResultSetをクローズ
-			DBManager.close(resultSet);
-			// Statementをクローズ
-			DBManager.close(preparedStatement);
-			// DBとの接続を切断
-			DBManager.close(connection);
 		}
 	}
 
@@ -93,7 +76,7 @@ public class DBController {
 	 * @throws SQLException           DB処理でエラーが発生した場合に送出
 	 * @throws IOException            入力処理でエラーが発生した場合に送出
 	 */
-	public static void findB() throws ClassNotFoundException, SQLException, IOException {
+	public static void findByName() throws ClassNotFoundException, SQLException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		// 検索ワード
@@ -173,7 +156,7 @@ public class DBController {
 	 * @throws SQLException           DB処理でエラーが発生した場合に送出
 	 * @throws IOException            入力処理でエラーが発生した場合に送出
 	 */
-	public static void findC(String deptId) throws ClassNotFoundException, SQLException, IOException {
+	public static void findByDeptId(String deptId) throws ClassNotFoundException, SQLException, IOException {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
