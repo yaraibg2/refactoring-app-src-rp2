@@ -44,27 +44,27 @@ public class MainSystem {
 				menuNumber = Integer.parseInt(menuNoStr);
 				// 機能の呼出
 				switch (menuNumber) {
-				case 1:
+				case ConstantValue.MENU_SELECT_ALL:
 					EmployeeAllFindService.findAll();
 					break;
 
-				case 2:
+				case ConstantValue.MENU_SEARCH_EMP_NAME:
 					EmployeeFindByEmpNameService.findByName();
 					break;
 
-				case 3:
+				case ConstantValue.MENU_SEARCH_DEPT_ID:
 					EmployeeFindByDeptIdService.findByDeptId(br);
 					break;
 
-				case 4:
+				case ConstantValue.MENU_INSERT:
 					EmployeeRegisterService.insertEmp(br);
 					break;
 
-				case 5:
+				case ConstantValue.MENU_UPDATE:
 					EmployeeUpdateService.updateEmp(br);
 					break;
 
-				case 6:
+				case ConstantValue.MENU_DELETE:
 					EmployeeDeleteService.deleteEmp();
 					break;
 				}

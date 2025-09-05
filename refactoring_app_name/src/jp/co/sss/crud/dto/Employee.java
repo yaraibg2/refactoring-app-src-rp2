@@ -2,6 +2,9 @@ package jp.co.sss.crud.dto;
 
 import java.util.Date;
 
+/**
+ * EmployeeテーブルのDtoクラス
+ */
 public class Employee {
 	/** 社員ID */
 	private Integer empId;
@@ -12,7 +15,7 @@ public class Employee {
 	/** 生年月日 */
 	private Date birthday;
 	/** 部署ID */
-	private Integer deptId;
+	private Department department;
 
 	/**
 	 * 社員IDを取得
@@ -79,18 +82,19 @@ public class Employee {
 	}
 
 	/**
-	 * 部署IDを取得
-	 * @return deptId
+	 * 部署を取得
+	 * @return department
 	 */
-	public Integer getDeptId() {
-		return deptId;
+	public Department getDepartment() {
+		return department;
 	}
 
 	/**
-	 * 部署IDをセット
-	 * @param deptId
+	 * 部署をセット
+	 * @param department
 	 */
-	public void setDeptId(Integer deptId) {
-		this.deptId = deptId;
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
+
 }
