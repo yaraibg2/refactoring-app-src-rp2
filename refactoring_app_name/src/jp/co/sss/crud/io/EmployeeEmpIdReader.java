@@ -11,7 +11,7 @@ public class EmployeeEmpIdReader implements IConsoleReader {
 	@Override
 	public boolean isValid(String inputString) {
 		// TODO 自動生成されたメソッド・スタブ
-		return false;
+		return true;
 	}
 
 	@Override

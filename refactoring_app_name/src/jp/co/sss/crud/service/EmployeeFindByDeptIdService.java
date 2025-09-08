@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.co.sss.crud.db.DBController;
+import jp.co.sss.crud.db.EmployeeDAO;
 import jp.co.sss.crud.dto.Department;
 import jp.co.sss.crud.dto.Employee;
 import jp.co.sss.crud.exception.IllegalInputException;
@@ -27,12 +27,15 @@ public class EmployeeFindByDeptIdService implements IEmployeeService {
 	@Override
 	public void execute() throws SystemErrorException, IllegalInputException {
 		EmployeeDeptIdReader employeeDeptIdReader = new EmployeeDeptIdReader();
+		EmployeeDAO employeeDAO = new EmployeeDAO();
 		// 検索する部署IDを入力
 		System.out.print(ConstantMsg.FIND_BY_DEPT_ID);
 		String deptId = (String) employeeDeptIdReader.input();
 
-		// 検索機能の呼出
-		DBController.findByDeptId(deptId);
+		int parsedDeptId = Integer.parseInt(deptId);
+		List<Employee> employees = employeeDAO.findByDeptId(parsedDeptId);
+
+		ConsoleWriter.showEmployees(employees);
 	}
 
 	/**

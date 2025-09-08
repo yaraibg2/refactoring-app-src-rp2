@@ -142,7 +142,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 			preparedStatement.setInt(1, empId);
 			// SQL文の実行(失敗時は戻り値0)
 			return preparedStatement.executeUpdate();
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
 		}
 	}

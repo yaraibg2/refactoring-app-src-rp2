@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.co.sss.crud.db.DBController;
+import jp.co.sss.crud.db.EmployeeDAO;
 import jp.co.sss.crud.dto.Department;
 import jp.co.sss.crud.dto.Employee;
 import jp.co.sss.crud.exception.IllegalInputException;
@@ -25,8 +25,10 @@ public class EmployeeAllFindService implements IEmployeeService {
 	 */
 	@Override
 	public void execute() throws SystemErrorException, IllegalInputException {
-		// 全件表示機能の呼出
-		DBController.findAll();
+		EmployeeDAO employeeDAO = new EmployeeDAO();
+		List<Employee> employees = employeeDAO.findAll();
+
+		ConsoleWriter.showEmployees(employees);
 	}
 
 	/**

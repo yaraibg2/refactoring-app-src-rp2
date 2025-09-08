@@ -9,11 +9,12 @@ import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import jp.co.sss.crud.db.DBController;
+import jp.co.sss.crud.db.EmployeeDAO;
 import jp.co.sss.crud.dto.Department;
 import jp.co.sss.crud.dto.Employee;
 import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
+import jp.co.sss.crud.io.ConsoleWriter;
 import jp.co.sss.crud.io.EmployeeEmpIdReader;
 import jp.co.sss.crud.util.ConstantMsg;
 import jp.co.sss.crud.util.ConstantValue;
@@ -31,6 +32,7 @@ public class EmployeeUpdateService implements IEmployeeService {
 	@Override
 	public void execute() throws SystemErrorException, IllegalInputException {
 		EmployeeEmpIdReader employeeEmpIdReader = new EmployeeEmpIdReader();
+		EmployeeDAO employeeDAO = new EmployeeDAO();
 
 		// 更新する社員IDを入力
 		System.out.print(ConstantMsg.INPUT_UPDATE);
@@ -39,8 +41,10 @@ public class EmployeeUpdateService implements IEmployeeService {
 		String inputEmpId = (String) employeeEmpIdReader.input();
 		Integer.parseInt(inputEmpId);
 
-		// 更新機能の呼出
-		DBController.update(inputEmpId);
+		Employee employee = readLineAndsetField(inputEmpId);
+		employeeDAO.update(employee);
+
+		ConsoleWriter.completeUpdateMsg();
 	}
 
 	/**

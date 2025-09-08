@@ -6,11 +6,12 @@ import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import jp.co.sss.crud.db.DBController;
+import jp.co.sss.crud.db.EmployeeDAO;
 import jp.co.sss.crud.dto.Department;
 import jp.co.sss.crud.dto.Employee;
 import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
+import jp.co.sss.crud.io.ConsoleWriter;
 import jp.co.sss.crud.io.EmployeeBirthdayReader;
 import jp.co.sss.crud.io.EmployeeDeptIdReader;
 import jp.co.sss.crud.io.EmployeeGenderReader;
@@ -34,6 +35,7 @@ public class EmployeeRegisterService implements IEmployeeService {
 		EmployeeGenderReader employeeGenderReader = new EmployeeGenderReader();
 		EmployeeBirthdayReader employeeBirthdayReader = new EmployeeBirthdayReader();
 		EmployeeDeptIdReader employeeDeptIdReader = new EmployeeDeptIdReader();
+		EmployeeDAO employeeDAO = new EmployeeDAO();
 
 		// 登録する値を入力
 		System.out.print(ConstantMsg.INPUT_EMP_NAME);
@@ -43,10 +45,12 @@ public class EmployeeRegisterService implements IEmployeeService {
 		System.out.print(ConstantMsg.INPUT_BIRTH_DAY);
 		String birthday = (String) employeeBirthdayReader.input();
 		System.out.print(ConstantMsg.UPDATE_DEPT_ID);
-		String inputDeptId = (String) employeeDeptIdReader.input();
+		String deptId = (String) employeeDeptIdReader.input();
 
-		// 登録機能の呼出
-		DBController.insert(empName, gender, birthday, inputDeptId);
+		Employee employee = setFields(empName, gender, birthday, deptId);
+		employeeDAO.insert(employee);
+
+		ConsoleWriter.completeInsertMsg();
 	}
 
 	/**
