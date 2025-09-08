@@ -3,17 +3,15 @@ package jp.co.sss.crud.main;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
-import java.text.ParseException;
 
+import jp.co.sss.crud.exception.SystemErrorException;
+import jp.co.sss.crud.io.ConsoleWriter;
 import jp.co.sss.crud.service.EmployeeAllFindService;
 import jp.co.sss.crud.service.EmployeeDeleteService;
 import jp.co.sss.crud.service.EmployeeFindByDeptIdService;
 import jp.co.sss.crud.service.EmployeeFindByEmpNameService;
 import jp.co.sss.crud.service.EmployeeRegisterService;
-import jp.co.sss.crud.service.EmployeeService;
 import jp.co.sss.crud.service.EmployeeUpdateService;
-import jp.co.sss.crud.util.ConstantMsg;
 import jp.co.sss.crud.util.ConstantValue;
 
 /**
@@ -26,19 +24,15 @@ import jp.co.sss.crud.util.ConstantValue;
 public class MainSystem {
 	/**
 	 * 社員管理システムを起動
-	 *
-	 * @throws IOException 
-	 * @throws SQLException 
-	 * @throws ClassNotFoundException 
-	 * @throws ParseException 
+	 * @throws SystemErrorException 
 	 */
-	public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException, ParseException {
+	public static void main(String[] args) throws SystemErrorException {
 		int menuNumber = 0;
 
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
 			do {
 				// メニューの表示
-				EmployeeService.showMenu();
+				ConsoleWriter.showMenu();
 				// メニュー番号の入力
 				String menuNoStr = br.readLine();
 				menuNumber = Integer.parseInt(menuNoStr);
@@ -49,7 +43,7 @@ public class MainSystem {
 					break;
 
 				case ConstantValue.MENU_SEARCH_EMP_NAME:
-					EmployeeFindByEmpNameService.findByName();
+					EmployeeFindByEmpNameService.findByName(br);
 					break;
 
 				case ConstantValue.MENU_SEARCH_DEPT_ID:
@@ -65,11 +59,13 @@ public class MainSystem {
 					break;
 
 				case ConstantValue.MENU_DELETE:
-					EmployeeDeleteService.deleteEmp();
+					EmployeeDeleteService.deleteEmp(br);
 					break;
 				}
 			} while (menuNumber != ConstantValue.SYSTEM_END_NUMBER);
-			System.out.println(ConstantMsg.SYSTEM_END);
+			ConsoleWriter.systemEnd();
+		} catch (IOException e) {
+			throw new SystemErrorException();
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package jp.co.sss.crud.dto;
 
-import java.util.Date;
+import jp.co.sss.crud.util.ConstantMsg;
 
 /**
  * EmployeeテーブルのDtoクラス
@@ -13,9 +13,23 @@ public class Employee {
 	/** 性別 */
 	private Integer gender;
 	/** 生年月日 */
-	private Date birthday;
+	private String birthday;
 	/** 部署ID */
 	private Department department;
+
+	@Override
+	public String toString() {
+		String genderJapanese = "";
+		if (this.gender == 1) {
+			genderJapanese = ConstantMsg.GENDER_MAN;
+		} else if (this.gender == 2) {
+			genderJapanese = ConstantMsg.GENDER_WOMAN;
+		}
+
+		return empId + ConstantMsg.SPACE + empName + ConstantMsg.SPACE
+				+ genderJapanese + ConstantMsg.SPACE + birthday + ConstantMsg.SPACE
+				+ department.getDeptName();
+	}
 
 	/**
 	 * 社員IDを取得
@@ -69,7 +83,7 @@ public class Employee {
 	 * 生年月日を取得
 	 * @return birthday
 	 */
-	public Date getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 
@@ -77,7 +91,7 @@ public class Employee {
 	 * 生年月日をセット
 	 * @param birthday
 	 */
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 

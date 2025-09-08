@@ -2,9 +2,16 @@ package jp.co.sss.crud.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import jp.co.sss.crud.db.DBController;
+import jp.co.sss.crud.dto.Department;
+import jp.co.sss.crud.dto.Employee;
+import jp.co.sss.crud.exception.SystemErrorException;
+import jp.co.sss.crud.io.ConsoleWriter;
 import jp.co.sss.crud.util.ConstantMsg;
 
 /**
@@ -12,18 +19,60 @@ import jp.co.sss.crud.util.ConstantMsg;
  */
 public class EmployeeFindByDeptIdService {
 	/**
+	 * インスタンス化の禁止
+	 */
+	private EmployeeFindByDeptIdService() {
+	}
+
+	/**
 	 * 社員をIDで検索
 	 * @param br
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 * @throws IOException
+	 * @throws SystemErrorException
 	 */
-	public static void findByDeptId(BufferedReader br) throws ClassNotFoundException, SQLException, IOException {
+	public static void findByDeptId(BufferedReader br) throws SystemErrorException {
 		// 検索する部署IDを入力
 		System.out.print(ConstantMsg.FIND_BY_DEPT_ID);
-		String deptId = br.readLine();
+		String deptId = null;
+		try {
+			deptId = br.readLine();
+		} catch (IOException e) {
+			throw new SystemErrorException();
+		}
 
 		// 検索機能の呼出
 		DBController.findByDeptId(deptId);
+	}
+
+	/**
+	 * 部署IDで絞り込んだレコードを抽出
+	 * @param resultSet
+	 * @return
+	 * @throws SystemErrorException
+	 */
+	public static List<Employee> getRecordFindByDeptId(ResultSet resultSet) throws SystemErrorException {
+		try {
+			if (!resultSet.isBeforeFirst()) {
+				ConsoleWriter.showNonExistTarget();
+				return null;
+			}
+
+			List<Employee> employees = new ArrayList<>();
+			while (resultSet.next()) {
+				Employee employee = new Employee();
+				Department department = new Department();
+
+				employee.setEmpId(resultSet.getInt(ConstantMsg.RECORD_EMP_ID));
+				employee.setEmpName(resultSet.getString(ConstantMsg.RECORD_EMP_NAME));
+				employee.setGender(resultSet.getInt(ConstantMsg.RECORD_GENDER));
+				employee.setBirthday(resultSet.getString(ConstantMsg.RECORD_BIRTHDAY));
+				department.setDeptName(resultSet.getString(ConstantMsg.RECORD_DEPT_NAME));
+				employee.setDepartment(department);
+
+				employees.add(employee);
+			}
+			return employees;
+		} catch (SQLException e) {
+			throw new SystemErrorException();
+		}
 	}
 }
