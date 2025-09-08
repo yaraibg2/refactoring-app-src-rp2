@@ -12,40 +12,35 @@ import java.text.SimpleDateFormat;
 import jp.co.sss.crud.db.DBController;
 import jp.co.sss.crud.dto.Department;
 import jp.co.sss.crud.dto.Employee;
+import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
+import jp.co.sss.crud.io.EmployeeEmpIdReader;
 import jp.co.sss.crud.util.ConstantMsg;
 import jp.co.sss.crud.util.ConstantValue;
 
 /**
  * 更新用のサービスクラス
  */
-public class EmployeeUpdateService {
-	/**
-	 * インスタンス化の禁止
-	 */
-	private EmployeeUpdateService() {
-	}
+public class EmployeeUpdateService implements IEmployeeService {
 
 	/**
 	 * 社員情報の更新
-	 * @param br
 	 * @throws SystemErrorException
+	 * @throws IllegalInputException 
 	 */
-	public static void updateEmp(BufferedReader br)
-			throws SystemErrorException {
-		try {
-			// 更新する社員IDを入力
-			System.out.print(ConstantMsg.INPUT_UPDATE);
+	@Override
+	public void execute() throws SystemErrorException, IllegalInputException {
+		EmployeeEmpIdReader employeeEmpIdReader = new EmployeeEmpIdReader();
 
-			// 更新する値を入力する
-			String inputEmpId = br.readLine();
-			Integer.parseInt(inputEmpId);
+		// 更新する社員IDを入力
+		System.out.print(ConstantMsg.INPUT_UPDATE);
 
-			// 更新機能の呼出
-			DBController.update(inputEmpId);
-		} catch (IOException e) {
-			throw new SystemErrorException();
-		}
+		// 更新する値を入力する
+		String inputEmpId = (String) employeeEmpIdReader.input();
+		Integer.parseInt(inputEmpId);
+
+		// 更新機能の呼出
+		DBController.update(inputEmpId);
 	}
 
 	/**
@@ -54,7 +49,7 @@ public class EmployeeUpdateService {
 	 * @return
 	 * @throws SystemErrorException
 	 */
-	public static Employee readLineAndsetField(String empId) throws SystemErrorException {
+	public Employee readLineAndsetField(String empId) throws SystemErrorException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		try {
@@ -75,7 +70,7 @@ public class EmployeeUpdateService {
 
 			return employee;
 		} catch (IOException e) {
-			throw new SystemErrorException();
+			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
 		}
 	}
 
@@ -108,7 +103,7 @@ public class EmployeeUpdateService {
 	 * @param employee
 	 * @throws SystemErrorException
 	 */
-	public static void bindPreparedStatement(PreparedStatement preparedStatement, Employee employee)
+	public void bindPreparedStatement(PreparedStatement preparedStatement, Employee employee)
 			throws SystemErrorException {
 		try {
 			preparedStatement.setString(ConstantValue.INDEX_ONE, employee.getEmpName());
@@ -118,7 +113,7 @@ public class EmployeeUpdateService {
 			preparedStatement.setInt(ConstantValue.INDEX_FOUR, employee.getDepartment().getDeptId());
 			preparedStatement.setInt(ConstantValue.INDEX_FIVE, employee.getEmpId());
 		} catch (SQLException | ParseException e) {
-			throw new SystemErrorException();
+			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
 		}
 	}
 }

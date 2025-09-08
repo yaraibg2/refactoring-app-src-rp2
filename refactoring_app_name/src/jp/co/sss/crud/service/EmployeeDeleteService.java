@@ -1,37 +1,30 @@
 package jp.co.sss.crud.service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-
 import jp.co.sss.crud.db.DBController;
+import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
+import jp.co.sss.crud.io.EmployeeEmpIdReader;
 import jp.co.sss.crud.util.ConstantMsg;
 
 /**
  * 削除用のサービスクラス
  */
-public class EmployeeDeleteService {
-	/**
-	 * インスタンス化の禁止
-	 */
-	private EmployeeDeleteService() {
-	}
+public class EmployeeDeleteService implements IEmployeeService {
 
 	/**
 	 * 社員を削除
-	 * @throws SystemErrorException 
+	 * @throws SystemErrorException
+	 * @throws IllegalInputException 
 	 */
-	public static void deleteEmp(BufferedReader br) throws SystemErrorException {
+	@Override
+	public void execute() throws SystemErrorException, IllegalInputException {
+		EmployeeEmpIdReader employeeEmpIdReader = new EmployeeEmpIdReader();
 		// 削除する社員IDを入力
 		System.out.print(ConstantMsg.INPUT_DELETE);
 
-		try {
-			String empId = br.readLine();
-			Integer parsedEmpId = Integer.parseInt(empId);
-			// 削除機能の呼出
-			DBController.delete(parsedEmpId);
-		} catch (IOException e) {
-			throw new SystemErrorException();
-		}
+		String empId = (String) employeeEmpIdReader.input();
+		Integer parsedEmpId = Integer.parseInt(empId);
+		// 削除機能の呼出
+		DBController.delete(parsedEmpId);
 	}
 }

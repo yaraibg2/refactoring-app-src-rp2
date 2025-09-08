@@ -1,7 +1,5 @@
 package jp.co.sss.crud.service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,36 +8,31 @@ import java.util.List;
 import jp.co.sss.crud.db.DBController;
 import jp.co.sss.crud.dto.Department;
 import jp.co.sss.crud.dto.Employee;
+import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
 import jp.co.sss.crud.io.ConsoleWriter;
+import jp.co.sss.crud.io.EmployeeNameReader;
 import jp.co.sss.crud.util.ConstantMsg;
 
 /**
  * 名前検索用のサービスクラス
  */
-public class EmployeeFindByEmpNameService {
-	/**
-	 * インスタンス化の禁止
-	 */
-	private EmployeeFindByEmpNameService() {
-	}
+public class EmployeeFindByEmpNameService implements IEmployeeService {
 
 	/**
 	 * 社員を名前で検索
 	 * @throws SystemErrorException
+	 * @throws IllegalInputException 
 	 */
-	public static void findByName(BufferedReader br) throws SystemErrorException {
+	@Override
+	public void execute() throws SystemErrorException, IllegalInputException {
+		EmployeeNameReader employeeNameReader = new EmployeeNameReader();
 		// 社員名検索
 		System.out.print(ConstantMsg.INPUT_EMP_NAME);
-
-		try {
-			// 検索ワード
-			String searchWord = br.readLine();
-			// 検索機能の呼出
-			DBController.findByName(searchWord);
-		} catch (IOException e) {
-			throw new SystemErrorException();
-		}
+		// 検索ワード
+		String searchWord = (String) employeeNameReader.input();
+		// 検索機能の呼出
+		DBController.findByName(searchWord);
 	}
 
 	/**
@@ -48,7 +41,7 @@ public class EmployeeFindByEmpNameService {
 	 * @return
 	 * @throws SystemErrorException
 	 */
-	public static List<Employee> getRecordFindByName(ResultSet resultSet) throws SystemErrorException {
+	public List<Employee> getRecordFindByName(ResultSet resultSet) throws SystemErrorException {
 		try {
 			if (!resultSet.isBeforeFirst()) {
 				ConsoleWriter.showNonExistTarget();
@@ -71,7 +64,7 @@ public class EmployeeFindByEmpNameService {
 			}
 			return employees;
 		} catch (SQLException e) {
-			throw new SystemErrorException();
+			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
 		}
 	}
 }

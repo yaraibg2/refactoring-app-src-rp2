@@ -8,6 +8,7 @@ import java.util.List;
 import jp.co.sss.crud.db.DBController;
 import jp.co.sss.crud.dto.Department;
 import jp.co.sss.crud.dto.Employee;
+import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
 import jp.co.sss.crud.io.ConsoleWriter;
 import jp.co.sss.crud.util.ConstantMsg;
@@ -15,18 +16,15 @@ import jp.co.sss.crud.util.ConstantMsg;
 /**
  * 全件検索用のサービスクラス
  */
-public class EmployeeAllFindService {
-	/**
-	 * インスタンス化の禁止
-	 */
-	private EmployeeAllFindService() {
-	}
+public class EmployeeAllFindService implements IEmployeeService {
 
 	/**
 	 * 全件検索
 	 * @throws SystemErrorException 
+	 * @throws IllegalInputException 
 	 */
-	public static void findAll() throws SystemErrorException {
+	@Override
+	public void execute() throws SystemErrorException, IllegalInputException {
 		// 全件表示機能の呼出
 		DBController.findAll();
 	}
@@ -37,7 +35,7 @@ public class EmployeeAllFindService {
 	 * @return
 	 * @throws SystemErrorException
 	 */
-	public static List<Employee> getAllRecord(ResultSet resultSet) throws SystemErrorException {
+	public List<Employee> getAllRecord(ResultSet resultSet) throws SystemErrorException {
 
 		try {
 			//resultSetの結果Setがない場合はfalse
@@ -64,7 +62,7 @@ public class EmployeeAllFindService {
 			return employees;
 
 		} catch (SQLException e) {
-			throw new SystemErrorException();
+			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
 		}
 	}
 }

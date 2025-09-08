@@ -1,17 +1,10 @@
 package jp.co.sss.crud.main;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
+import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
 import jp.co.sss.crud.io.ConsoleWriter;
-import jp.co.sss.crud.service.EmployeeAllFindService;
-import jp.co.sss.crud.service.EmployeeDeleteService;
-import jp.co.sss.crud.service.EmployeeFindByDeptIdService;
-import jp.co.sss.crud.service.EmployeeFindByEmpNameService;
-import jp.co.sss.crud.service.EmployeeRegisterService;
-import jp.co.sss.crud.service.EmployeeUpdateService;
+import jp.co.sss.crud.io.MenuNoReader;
+import jp.co.sss.crud.service.IEmployeeService;
 import jp.co.sss.crud.util.ConstantValue;
 
 /**
@@ -26,46 +19,54 @@ public class MainSystem {
 	 * 社員管理システムを起動
 	 * @throws SystemErrorException 
 	 */
-	public static void main(String[] args) throws SystemErrorException {
-		int menuNumber = 0;
+	public static void main(String[] args) {
+		int menuNo = 0;
+		MenuNoReader reader = new MenuNoReader();
 
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-			do {
+		do {
+			try {
 				// メニューの表示
 				ConsoleWriter.showMenu();
 				// メニュー番号の入力
-				String menuNoStr = br.readLine();
-				menuNumber = Integer.parseInt(menuNoStr);
+				String inputMenuNo = (String) reader.input();
+				menuNo = Integer.parseInt(inputMenuNo);
+				IEmployeeService service = IEmployeeService.getInstanceByMenuNo(menuNo);
 				// 機能の呼出
-				switch (menuNumber) {
+				switch (menuNo) {
 				case ConstantValue.MENU_SELECT_ALL:
-					EmployeeAllFindService.findAll();
+					service.execute();
 					break;
 
 				case ConstantValue.MENU_SEARCH_EMP_NAME:
-					EmployeeFindByEmpNameService.findByName(br);
+					service.execute();
 					break;
 
 				case ConstantValue.MENU_SEARCH_DEPT_ID:
-					EmployeeFindByDeptIdService.findByDeptId(br);
+					service.execute();
 					break;
 
 				case ConstantValue.MENU_INSERT:
-					EmployeeRegisterService.insertEmp(br);
+					service.execute();
 					break;
 
 				case ConstantValue.MENU_UPDATE:
-					EmployeeUpdateService.updateEmp(br);
+					service.execute();
 					break;
 
 				case ConstantValue.MENU_DELETE:
-					EmployeeDeleteService.deleteEmp(br);
+					service.execute();
 					break;
 				}
-			} while (menuNumber != ConstantValue.SYSTEM_END_NUMBER);
-			ConsoleWriter.systemEnd();
-		} catch (IOException e) {
-			throw new SystemErrorException();
-		}
+			} catch (IllegalInputException e) {
+				System.out.println(e.getMessage());
+				System.out.println();
+				continue;
+			} catch (SystemErrorException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+				break;
+			}
+		} while (menuNo != ConstantValue.SYSTEM_END_NUMBER);
+		ConsoleWriter.systemEnd();
 	}
 }

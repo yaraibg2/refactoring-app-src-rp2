@@ -1,7 +1,5 @@
 package jp.co.sss.crud.service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,34 +8,28 @@ import java.util.List;
 import jp.co.sss.crud.db.DBController;
 import jp.co.sss.crud.dto.Department;
 import jp.co.sss.crud.dto.Employee;
+import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
 import jp.co.sss.crud.io.ConsoleWriter;
+import jp.co.sss.crud.io.EmployeeDeptIdReader;
 import jp.co.sss.crud.util.ConstantMsg;
 
 /**
  * 主キー検索用のサービスクラス
  */
-public class EmployeeFindByDeptIdService {
-	/**
-	 * インスタンス化の禁止
-	 */
-	private EmployeeFindByDeptIdService() {
-	}
+public class EmployeeFindByDeptIdService implements IEmployeeService {
 
 	/**
 	 * 社員をIDで検索
-	 * @param br
 	 * @throws SystemErrorException
+	 * @throws IllegalInputException 
 	 */
-	public static void findByDeptId(BufferedReader br) throws SystemErrorException {
+	@Override
+	public void execute() throws SystemErrorException, IllegalInputException {
+		EmployeeDeptIdReader employeeDeptIdReader = new EmployeeDeptIdReader();
 		// 検索する部署IDを入力
 		System.out.print(ConstantMsg.FIND_BY_DEPT_ID);
-		String deptId = null;
-		try {
-			deptId = br.readLine();
-		} catch (IOException e) {
-			throw new SystemErrorException();
-		}
+		String deptId = (String) employeeDeptIdReader.input();
 
 		// 検索機能の呼出
 		DBController.findByDeptId(deptId);
@@ -49,7 +41,7 @@ public class EmployeeFindByDeptIdService {
 	 * @return
 	 * @throws SystemErrorException
 	 */
-	public static List<Employee> getRecordFindByDeptId(ResultSet resultSet) throws SystemErrorException {
+	public List<Employee> getRecordFindByDeptId(ResultSet resultSet) throws SystemErrorException {
 		try {
 			if (!resultSet.isBeforeFirst()) {
 				ConsoleWriter.showNonExistTarget();
@@ -72,7 +64,7 @@ public class EmployeeFindByDeptIdService {
 			}
 			return employees;
 		} catch (SQLException e) {
-			throw new SystemErrorException();
+			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
 		}
 	}
 }

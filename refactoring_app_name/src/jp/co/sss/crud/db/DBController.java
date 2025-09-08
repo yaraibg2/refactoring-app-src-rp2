@@ -70,7 +70,8 @@ public class DBController {
 	public static void insert(String empName, String gender, String birthday, String deptId)
 			throws SystemErrorException {
 		EmployeeDAO employeeDAO = new EmployeeDAO();
-		Employee employee = EmployeeRegisterService.setFields(empName, gender, birthday, deptId);
+		EmployeeRegisterService employeeRegisterService = new EmployeeRegisterService();
+		Employee employee = employeeRegisterService.setFields(empName, gender, birthday, deptId);
 		employeeDAO.insert(employee);
 
 		ConsoleWriter.completeInsertMsg();
@@ -85,7 +86,8 @@ public class DBController {
 	public static void update(String empId)
 			throws SystemErrorException {
 		EmployeeDAO employeeDAO = new EmployeeDAO();
-		Employee employee = EmployeeUpdateService.readLineAndsetField(empId);
+		EmployeeUpdateService employeeUpdateService = new EmployeeUpdateService();
+		Employee employee = employeeUpdateService.readLineAndsetField(empId);
 		employeeDAO.update(employee);
 
 		ConsoleWriter.completeUpdateMsg();

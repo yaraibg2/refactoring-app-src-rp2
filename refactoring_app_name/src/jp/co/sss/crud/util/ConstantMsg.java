@@ -121,4 +121,7 @@ public class ConstantMsg {
 
 	/** 総務部 */
 	public static final String DEPT_GENERAL = "総務部";
+
+	/** システムエラーメッセージ */
+	public static final String MSG_SYSTEM_ERROR = "予期せぬエラーが発生しました。";
 }

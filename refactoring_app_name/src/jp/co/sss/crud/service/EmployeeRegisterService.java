@@ -1,7 +1,5 @@
 package jp.co.sss.crud.service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -11,46 +9,44 @@ import java.text.SimpleDateFormat;
 import jp.co.sss.crud.db.DBController;
 import jp.co.sss.crud.dto.Department;
 import jp.co.sss.crud.dto.Employee;
+import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
+import jp.co.sss.crud.io.EmployeeBirthdayReader;
+import jp.co.sss.crud.io.EmployeeDeptIdReader;
+import jp.co.sss.crud.io.EmployeeGenderReader;
+import jp.co.sss.crud.io.EmployeeNameReader;
 import jp.co.sss.crud.util.ConstantMsg;
 import jp.co.sss.crud.util.ConstantValue;
 
 /**
  * 新規登録用のサービスクラス
  */
-public class EmployeeRegisterService {
-	/**
-	 * インスタンス化の禁止
-	 */
-	private EmployeeRegisterService() {
-	}
+public class EmployeeRegisterService implements IEmployeeService {
 
 	/**
 	 * 新規社員の登録処理
-	 * @param br
-	 * @throws IOException
-	 * @throws ParseException
-	 * @throws SQLException
-	 * @throws ClassNotFoundException
+	 * @throws SystemErrorException 
+	 * @throws IllegalInputException 
 	 */
-	public static void insertEmp(BufferedReader br)
-			throws SystemErrorException {
-		try {
-			// 登録する値を入力
-			System.out.print(ConstantMsg.INPUT_EMP_NAME);
-			String empName = br.readLine();
-			System.out.print(ConstantMsg.INPUT_GENDER);
-			String gender = br.readLine();
-			System.out.print(ConstantMsg.INPUT_BIRTH_DAY);
-			String birthday = br.readLine();
-			System.out.print(ConstantMsg.UPDATE_DEPT_ID);
-			String inputDeptId = br.readLine();
+	@Override
+	public void execute() throws SystemErrorException, IllegalInputException {
+		EmployeeNameReader employeeNameReader = new EmployeeNameReader();
+		EmployeeGenderReader employeeGenderReader = new EmployeeGenderReader();
+		EmployeeBirthdayReader employeeBirthdayReader = new EmployeeBirthdayReader();
+		EmployeeDeptIdReader employeeDeptIdReader = new EmployeeDeptIdReader();
 
-			// 登録機能の呼出
-			DBController.insert(empName, gender, birthday, inputDeptId);
-		} catch (IOException e) {
-			throw new SystemErrorException();
-		}
+		// 登録する値を入力
+		System.out.print(ConstantMsg.INPUT_EMP_NAME);
+		String empName = (String) employeeNameReader.input();
+		System.out.print(ConstantMsg.INPUT_GENDER);
+		String gender = (String) employeeGenderReader.input();
+		System.out.print(ConstantMsg.INPUT_BIRTH_DAY);
+		String birthday = (String) employeeBirthdayReader.input();
+		System.out.print(ConstantMsg.UPDATE_DEPT_ID);
+		String inputDeptId = (String) employeeDeptIdReader.input();
+
+		// 登録機能の呼出
+		DBController.insert(empName, gender, birthday, inputDeptId);
 	}
 
 	/**
@@ -61,7 +57,7 @@ public class EmployeeRegisterService {
 	 * @param deptId
 	 * @return
 	 */
-	public static Employee setFields(String empName, String gender, String birthday, String deptId) {
+	public Employee setFields(String empName, String gender, String birthday, String deptId) {
 		Employee employee = new Employee();
 		Department department = new Department();
 		employee.setEmpName(empName);
@@ -80,7 +76,7 @@ public class EmployeeRegisterService {
 	 * @return
 	 * @throws SystemErrorException
 	 */
-	public static void bindPreparedStatement(PreparedStatement preparedStatement, Employee employee)
+	public void bindPreparedStatement(PreparedStatement preparedStatement, Employee employee)
 			throws SystemErrorException {
 		try {
 			// 入力値をバインド
@@ -90,7 +86,7 @@ public class EmployeeRegisterService {
 			preparedStatement.setObject(ConstantValue.INDEX_THREE, sdf.parse(employee.getBirthday()), Types.DATE);
 			preparedStatement.setInt(ConstantValue.INDEX_FOUR, employee.getDepartment().getDeptId());
 		} catch (SQLException | ParseException e) {
-			throw new SystemErrorException();
+			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
 		}
 	}
 }
