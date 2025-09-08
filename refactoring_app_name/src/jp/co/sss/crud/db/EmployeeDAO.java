@@ -20,7 +20,8 @@ import jp.co.sss.crud.util.ConstantValue;
 public class EmployeeDAO implements IEmployeeDAO {
 
 	/**
-	 *全件検索のリストを返す
+	 * 全件検索のリストを返す
+	 * @return 全社員リスト
 	 */
 	@Override
 	public List<Employee> findAll() throws SystemErrorException {
@@ -39,6 +40,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 	/**
 	 * 社員名で検索したリストを返す
 	 * @param searchName 検索名
+	 * @return 社員リスト
 	 */
 	@Override
 	public List<Employee> findByEmployeeName(String searchName) throws SystemErrorException {
@@ -68,6 +70,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 	/**
 	 * 部署IDで検索したリストを返す
 	 * @param deptId 部署ID
+	 * @return 社員リスト
 	 */
 	@Override
 	public List<Employee> findByDeptId(int deptId) throws SystemErrorException {
@@ -115,6 +118,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 	/**
 	 * 入力した社員情報でデータベースを更新
 	 * @param employee
+	 * @return SQLデータ操作言語(DML)文の場合は行数、何も返さないSQL文の場合は0
 	 */
 	@Override
 	public Integer update(Employee employee) throws SystemErrorException {
@@ -133,13 +137,14 @@ public class EmployeeDAO implements IEmployeeDAO {
 	/**
 	 * 入力した社員IDの社員をデータベースから削除
 	 * @param empId 社員ID
+	 * @return SQLデータ操作言語(DML)文の場合は行数、何も返さないSQL文の場合は0
 	 */
 	@Override
 	public Integer delete(Integer empId) throws SystemErrorException {
 		try (Connection connection = DBManager.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(ConstantSQL.SQL_DELETE);) {
 			// 社員IDをバインド
-			preparedStatement.setInt(1, empId);
+			preparedStatement.setInt(ConstantValue.INDEX_ONE, empId);
 			// SQL文の実行(失敗時は戻り値0)
 			return preparedStatement.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {

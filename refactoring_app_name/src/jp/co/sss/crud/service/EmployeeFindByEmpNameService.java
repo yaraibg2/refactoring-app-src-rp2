@@ -41,11 +41,12 @@ public class EmployeeFindByEmpNameService implements IEmployeeService {
 	/**
 	 * 社員名で絞り込んだレコードを抽出
 	 * @param resultSet
-	 * @return
+	 * @return 社員リスト
 	 * @throws SystemErrorException
 	 */
 	public List<Employee> getRecordFindByName(ResultSet resultSet) throws SystemErrorException {
 		try {
+			//resultSetの結果Setがない場合はnullを返す
 			if (!resultSet.isBeforeFirst()) {
 				ConsoleWriter.showNonExistTarget();
 				return null;

@@ -4,14 +4,12 @@ public class EmployeeNameReader implements IConsoleReader {
 
 	@Override
 	public String getErrorMsg() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		return "1文字以上30文字以下の文字列を入力してください";
 	}
 
 	@Override
 	public boolean isValid(String inputString) {
-		// TODO 自動生成されたメソッド・スタブ
-		return true;
+		return inputString.length() >= 1 && 30 >= inputString.length();
 	}
 
 	@Override

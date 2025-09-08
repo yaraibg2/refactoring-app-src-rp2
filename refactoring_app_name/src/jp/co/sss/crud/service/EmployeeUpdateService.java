@@ -50,7 +50,7 @@ public class EmployeeUpdateService implements IEmployeeService {
 	/**
 	 * 入力値を受け取り、DTOに移して返す
 	 * @param empId
-	 * @return
+	 * @return Employee Dto
 	 * @throws SystemErrorException
 	 */
 	public Employee readLineAndsetField(String empId) throws SystemErrorException {
@@ -85,7 +85,7 @@ public class EmployeeUpdateService implements IEmployeeService {
 	 * @param birthday
 	 * @param deptId
 	 * @param empId
-	 * @return
+	 * @return Employee Dto
 	 */
 	private static Employee setDtoFields(String empName, String gender, String birthday, String deptId, String empId) {
 		Employee employee = new Employee();

@@ -41,11 +41,12 @@ public class EmployeeFindByDeptIdService implements IEmployeeService {
 	/**
 	 * 部署IDで絞り込んだレコードを抽出
 	 * @param resultSet
-	 * @return
+	 * @return 社員リスト
 	 * @throws SystemErrorException
 	 */
 	public List<Employee> getRecordFindByDeptId(ResultSet resultSet) throws SystemErrorException {
 		try {
+			//resultSetの結果Setがない場合はnullを返す
 			if (!resultSet.isBeforeFirst()) {
 				ConsoleWriter.showNonExistTarget();
 				return null;

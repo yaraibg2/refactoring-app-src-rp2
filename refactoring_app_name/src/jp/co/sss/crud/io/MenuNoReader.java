@@ -4,14 +4,12 @@ public class MenuNoReader implements IConsoleReader {
 
 	@Override
 	public String getErrorMsg() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		return "1以上7以下の整数を入力してください";
 	}
 
 	@Override
 	public boolean isValid(String inputString) {
-		// TODO 自動生成されたメソッド・スタブ
-		return true;
+		return inputString.matches("^[1-7 １-７]$");
 	}
 
 	@Override

@@ -4,14 +4,12 @@ public class EmployeeDeptIdReader implements IConsoleReader {
 
 	@Override
 	public String getErrorMsg() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		return "1以上3以下の整数を入力してください";
 	}
 
 	@Override
 	public boolean isValid(String inputString) {
-		// TODO 自動生成されたメソッド・スタブ
-		return true;
+		return inputString.matches("^[1-3１-３]{1}$");
 	}
 
 	@Override

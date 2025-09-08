@@ -59,7 +59,7 @@ public class EmployeeRegisterService implements IEmployeeService {
 	 * @param gender
 	 * @param birthday
 	 * @param deptId
-	 * @return
+	 * @return Employee Dto
 	 */
 	public Employee setFields(String empName, String gender, String birthday, String deptId) {
 		Employee employee = new Employee();
@@ -77,7 +77,6 @@ public class EmployeeRegisterService implements IEmployeeService {
 	 * PreparedStatementに値をバインド
 	 * @param preparedStatement
 	 * @param employee
-	 * @return
 	 * @throws SystemErrorException
 	 */
 	public void bindPreparedStatement(PreparedStatement preparedStatement, Employee employee)

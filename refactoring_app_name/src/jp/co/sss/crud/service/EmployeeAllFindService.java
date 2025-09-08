@@ -34,13 +34,13 @@ public class EmployeeAllFindService implements IEmployeeService {
 	/**
 	 * 全レコードが入ったリストを抽出
 	 * @param resultSet
-	 * @return
+	 * @return 全社員リスト
 	 * @throws SystemErrorException
 	 */
 	public List<Employee> getAllRecord(ResultSet resultSet) throws SystemErrorException {
 
 		try {
-			//resultSetの結果Setがない場合はfalse
+			//resultSetの結果Setがない場合はnullを返す
 			if (!resultSet.isBeforeFirst()) {
 				ConsoleWriter.showNonExistTarget();
 				return null;
