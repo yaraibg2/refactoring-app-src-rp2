@@ -1,21 +1,22 @@
 package jp.co.sss.crud.io;
 
+import static jp.co.sss.crud.util.ConstantMsg.*;
+
 public class EmployeeEmpIdReader implements IConsoleReader {
 
 	@Override
 	public String getErrorMsg() {
-		return "1以上9999以下の整数を入力してください";
+		return EMP_ID_VALID_MSG;
 	}
 
 	@Override
 	public boolean isValid(String inputString) {
-		return inputString.matches("^[1-9１-９]{1}[0-9１-９]{0,3}$");
+		return inputString.matches(EMP_ID_VALID_VALUE);
 	}
 
 	@Override
 	public boolean isParseInt() {
-		// TODO 自動生成されたメソッド・スタブ
-		return false;
+		return true;
 	}
 
 }

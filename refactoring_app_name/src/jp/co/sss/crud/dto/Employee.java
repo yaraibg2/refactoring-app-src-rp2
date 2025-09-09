@@ -1,6 +1,6 @@
 package jp.co.sss.crud.dto;
 
-import jp.co.sss.crud.util.ConstantMsg;
+import static jp.co.sss.crud.util.ConstantMsg.*;
 
 /**
  * EmployeeテーブルのDtoクラス
@@ -21,13 +21,13 @@ public class Employee {
 	public String toString() {
 		String genderJapanese = "";
 		if (this.gender == 1) {
-			genderJapanese = ConstantMsg.GENDER_MAN;
+			genderJapanese = GENDER_MAN;
 		} else if (this.gender == 2) {
-			genderJapanese = ConstantMsg.GENDER_WOMAN;
+			genderJapanese = GENDER_WOMAN;
 		}
 
-		return empId + ConstantMsg.SPACE + empName + ConstantMsg.SPACE
-				+ genderJapanese + ConstantMsg.SPACE + birthday + ConstantMsg.SPACE
+		return empId + SPACE + empName + SPACE
+				+ genderJapanese + SPACE + birthday + SPACE
 				+ department.getDeptName();
 	}
 

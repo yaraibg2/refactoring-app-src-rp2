@@ -1,5 +1,8 @@
 package jp.co.sss.crud.service;
 
+import static jp.co.sss.crud.util.ConstantMsg.*;
+import static jp.co.sss.crud.util.ConstantValue.*;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -16,8 +19,7 @@ import jp.co.sss.crud.io.EmployeeBirthdayReader;
 import jp.co.sss.crud.io.EmployeeDeptIdReader;
 import jp.co.sss.crud.io.EmployeeGenderReader;
 import jp.co.sss.crud.io.EmployeeNameReader;
-import jp.co.sss.crud.util.ConstantMsg;
-import jp.co.sss.crud.util.ConstantValue;
+import jp.co.sss.crud.io.IConsoleReader;
 
 /**
  * 新規登録用のサービスクラス
@@ -31,21 +33,23 @@ public class EmployeeRegisterService implements IEmployeeService {
 	 */
 	@Override
 	public void execute() throws SystemErrorException, IllegalInputException {
-		EmployeeNameReader employeeNameReader = new EmployeeNameReader();
-		EmployeeGenderReader employeeGenderReader = new EmployeeGenderReader();
-		EmployeeBirthdayReader employeeBirthdayReader = new EmployeeBirthdayReader();
-		EmployeeDeptIdReader employeeDeptIdReader = new EmployeeDeptIdReader();
+		IConsoleReader reader = new EmployeeNameReader();
 		EmployeeDAO employeeDAO = new EmployeeDAO();
-
 		// 登録する値を入力
-		System.out.print(ConstantMsg.INPUT_EMP_NAME);
-		String empName = (String) employeeNameReader.input();
-		System.out.print(ConstantMsg.INPUT_GENDER);
-		String gender = (String) employeeGenderReader.input();
-		System.out.print(ConstantMsg.INPUT_BIRTH_DAY);
-		String birthday = (String) employeeBirthdayReader.input();
-		System.out.print(ConstantMsg.UPDATE_DEPT_ID);
-		String deptId = (String) employeeDeptIdReader.input();
+		System.out.print(INPUT_EMP_NAME);
+		String empName = (String) reader.input();
+
+		System.out.print(INPUT_GENDER);
+		reader = new EmployeeGenderReader();
+		int gender = (int) reader.input();
+
+		System.out.print(INPUT_BIRTH_DAY);
+		reader = new EmployeeBirthdayReader();
+		String birthday = (String) reader.input();
+
+		System.out.print(UPDATE_DEPT_ID);
+		reader = new EmployeeDeptIdReader();
+		int deptId = (int) reader.input();
 
 		Employee employee = setFields(empName, gender, birthday, deptId);
 		employeeDAO.insert(employee);
@@ -61,13 +65,13 @@ public class EmployeeRegisterService implements IEmployeeService {
 	 * @param deptId
 	 * @return Employee Dto
 	 */
-	public Employee setFields(String empName, String gender, String birthday, String deptId) {
+	public Employee setFields(String empName, int gender, String birthday, int deptId) {
 		Employee employee = new Employee();
 		Department department = new Department();
 		employee.setEmpName(empName);
-		employee.setGender(Integer.parseInt(gender));
+		employee.setGender(gender);
 		employee.setBirthday(birthday);
-		department.setDeptId(Integer.parseInt(deptId));
+		department.setDeptId(deptId);
 		employee.setDepartment(department);
 
 		return employee;
@@ -83,13 +87,13 @@ public class EmployeeRegisterService implements IEmployeeService {
 			throws SystemErrorException {
 		try {
 			// 入力値をバインド
-			preparedStatement.setString(ConstantValue.INDEX_ONE, employee.getEmpName());
-			preparedStatement.setInt(ConstantValue.INDEX_TWO, employee.getGender());
-			SimpleDateFormat sdf = new SimpleDateFormat(ConstantMsg.DATE_FORMAT);
-			preparedStatement.setObject(ConstantValue.INDEX_THREE, sdf.parse(employee.getBirthday()), Types.DATE);
-			preparedStatement.setInt(ConstantValue.INDEX_FOUR, employee.getDepartment().getDeptId());
+			preparedStatement.setString(INDEX_ONE, employee.getEmpName());
+			preparedStatement.setInt(INDEX_TWO, employee.getGender());
+			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+			preparedStatement.setObject(INDEX_THREE, sdf.parse(employee.getBirthday()), Types.DATE);
+			preparedStatement.setInt(INDEX_FOUR, employee.getDepartment().getDeptId());
 		} catch (SQLException | ParseException e) {
-			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
+			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
 		}
 	}
 }

@@ -124,4 +124,34 @@ public class ConstantMsg {
 
 	/** システムエラーメッセージ */
 	public static final String MSG_SYSTEM_ERROR = "予期せぬエラーが発生しました。";
+
+	/** 生年月日のバリデーションメッセージ */
+	public static final String DATE_VALID_MSG = "正しい形式(西暦年/月/日)で日付を入力してください";
+
+	/** 部署IDのバリデーションメッセージ */
+	public static final String DEPT_ID_VALID_MSG = "1以上3以下の整数を入力してください";
+
+	/** 部署IDの正規表現 */
+	public static final String DEPT_ID_VALID_VALUE = "^[1-3１-３]{1}$";
+
+	/** 社員IDのバリデーションメッセージ */
+	public static final String EMP_ID_VALID_MSG = "1以上9999以下の整数を入力してください";
+
+	/** 社員IDの正規表現 */
+	public static final String EMP_ID_VALID_VALUE = "^[1-9１-９]{1}[0-9１-９]{0,3}$";
+
+	/** 性別のバリデーションメッセージ */
+	public static final String GENDER_VALID_MSG = "0,1,2,または9の整数を入力してください";
+
+	/** 性別の正規表現 */
+	public static final String GENDER_VALID_VALUE = "^|[0129０１２９]{1}$";
+
+	/** 社員名のバリデーションメッセージ */
+	public static final String EMP_NAME_VALID_MSG = "1文字以上30文字以下の文字列を入力してください";
+
+	/** メニュー番号のバリデーションメッセージ */
+	public static final String MENU_NO_VALID_MSG = "1以上7以下の整数を入力してください";
+
+	/** メニュー番号の正規表現 */
+	public static final String MENU_NO_VALID_VALUE = "^[1-7 １-７]$";
 }

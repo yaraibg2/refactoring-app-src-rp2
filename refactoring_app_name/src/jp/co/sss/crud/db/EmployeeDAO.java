@@ -1,5 +1,9 @@
 package jp.co.sss.crud.db;
 
+import static jp.co.sss.crud.util.ConstantMsg.*;
+import static jp.co.sss.crud.util.ConstantSQL.*;
+import static jp.co.sss.crud.util.ConstantValue.*;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,16 +17,10 @@ import jp.co.sss.crud.service.EmployeeFindByDeptIdService;
 import jp.co.sss.crud.service.EmployeeFindByEmpNameService;
 import jp.co.sss.crud.service.EmployeeRegisterService;
 import jp.co.sss.crud.service.EmployeeUpdateService;
-import jp.co.sss.crud.util.ConstantMsg;
 import jp.co.sss.crud.util.ConstantSQL;
-import jp.co.sss.crud.util.ConstantValue;
 
 public class EmployeeDAO implements IEmployeeDAO {
 
-	/**
-	 * 全件検索のリストを返す
-	 * @return 全社員リスト
-	 */
 	@Override
 	public List<Employee> findAll() throws SystemErrorException {
 		try (Connection connection = DBManager.getConnection();
@@ -33,15 +31,10 @@ public class EmployeeDAO implements IEmployeeDAO {
 			return employeeAllFindService.getAllRecord(resultSet);
 
 		} catch (ClassNotFoundException | SQLException e) {
-			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
+			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
 		}
 	}
 
-	/**
-	 * 社員名で検索したリストを返す
-	 * @param searchName 検索名
-	 * @return 社員リスト
-	 */
 	@Override
 	public List<Employee> findByEmployeeName(String searchName) throws SystemErrorException {
 		EmployeeFindByEmpNameService employeeFindByEmpNameService = new EmployeeFindByEmpNameService();
@@ -49,13 +42,13 @@ public class EmployeeDAO implements IEmployeeDAO {
 		try {
 			Connection connection = DBManager.getConnection();
 			// SQL文を準備
-			StringBuffer sql = new StringBuffer(ConstantSQL.SQL_SELECT_BASIC);
-			sql.append(ConstantSQL.SQL_SELECT_BY_EMP_NAME);
+			StringBuffer sql = new StringBuffer(SQL_SELECT_BASIC);
+			sql.append(SQL_SELECT_BY_EMP_NAME);
 
 			PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
 
 			// 検索条件となる値をバインド
-			preparedStatement.setString(ConstantValue.INDEX_ONE, "%" + searchName + "%");
+			preparedStatement.setString(INDEX_ONE, "%" + searchName + "%");
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			try (connection; preparedStatement; resultSet) {
@@ -63,15 +56,10 @@ public class EmployeeDAO implements IEmployeeDAO {
 				return employeeFindByEmpNameService.getRecordFindByName(resultSet);
 			}
 		} catch (ClassNotFoundException | SQLException e) {
-			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
+			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
 		}
 	}
 
-	/**
-	 * 部署IDで検索したリストを返す
-	 * @param deptId 部署ID
-	 * @return 社員リスト
-	 */
 	@Override
 	public List<Employee> findByDeptId(int deptId) throws SystemErrorException {
 		EmployeeFindByDeptIdService employeeFindByDeptIdService = new EmployeeFindByDeptIdService();
@@ -79,13 +67,13 @@ public class EmployeeDAO implements IEmployeeDAO {
 		try {
 			Connection connection = DBManager.getConnection();
 			// SQL文を準備
-			StringBuffer sql = new StringBuffer(ConstantSQL.SQL_SELECT_BASIC);
-			sql.append(ConstantSQL.SQL_SELECT_BY_DEPT_ID);
+			StringBuffer sql = new StringBuffer(SQL_SELECT_BASIC);
+			sql.append(SQL_SELECT_BY_DEPT_ID);
 
 			PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
 
 			// 検索条件となる値をバインド
-			preparedStatement.setInt(ConstantValue.INDEX_ONE, deptId);
+			preparedStatement.setInt(INDEX_ONE, deptId);
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			try (connection; preparedStatement; resultSet) {
@@ -93,14 +81,10 @@ public class EmployeeDAO implements IEmployeeDAO {
 				return employeeFindByDeptIdService.getRecordFindByDeptId(resultSet);
 			}
 		} catch (ClassNotFoundException | SQLException e) {
-			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
+			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
 		}
 	}
 
-	/**
-	 * 入力した社員情報をデータベースに登録
-	 * @param employee
-	 */
 	@Override
 	public void insert(Employee employee) throws SystemErrorException {
 		EmployeeRegisterService employeeRegisterService = new EmployeeRegisterService();
@@ -111,15 +95,10 @@ public class EmployeeDAO implements IEmployeeDAO {
 			// SQL文を実行
 			preparedStatement.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
-			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
+			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
 		}
 	}
 
-	/**
-	 * 入力した社員情報でデータベースを更新
-	 * @param employee
-	 * @return SQLデータ操作言語(DML)文の場合は行数、何も返さないSQL文の場合は0
-	 */
 	@Override
 	public Integer update(Employee employee) throws SystemErrorException {
 		EmployeeUpdateService employeeUpdateService = new EmployeeUpdateService();
@@ -130,25 +109,20 @@ public class EmployeeDAO implements IEmployeeDAO {
 			// SQL文の実行(失敗時は戻り値0)
 			return preparedStatement.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
-			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
+			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
 		}
 	}
 
-	/**
-	 * 入力した社員IDの社員をデータベースから削除
-	 * @param empId 社員ID
-	 * @return SQLデータ操作言語(DML)文の場合は行数、何も返さないSQL文の場合は0
-	 */
 	@Override
 	public Integer delete(Integer empId) throws SystemErrorException {
 		try (Connection connection = DBManager.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(ConstantSQL.SQL_DELETE);) {
 			// 社員IDをバインド
-			preparedStatement.setInt(ConstantValue.INDEX_ONE, empId);
+			preparedStatement.setInt(INDEX_ONE, empId);
 			// SQL文の実行(失敗時は戻り値0)
 			return preparedStatement.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
-			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
+			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
 		}
 	}
 

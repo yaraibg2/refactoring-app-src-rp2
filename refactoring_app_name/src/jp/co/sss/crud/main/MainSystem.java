@@ -1,11 +1,13 @@
 package jp.co.sss.crud.main;
 
+import static jp.co.sss.crud.util.ConstantValue.*;
+
 import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
 import jp.co.sss.crud.io.ConsoleWriter;
+import jp.co.sss.crud.io.IConsoleReader;
 import jp.co.sss.crud.io.MenuNoReader;
 import jp.co.sss.crud.service.IEmployeeService;
-import jp.co.sss.crud.util.ConstantValue;
 
 /**
  * 社員情報管理システム開始クラス 社員情報管理システムはこのクラスから始まる。<br/>
@@ -17,19 +19,16 @@ import jp.co.sss.crud.util.ConstantValue;
 public class MainSystem {
 	/**
 	 * 社員管理システムを起動
-	 * @throws SystemErrorException 
 	 */
 	public static void main(String[] args) {
 		int menuNo = 0;
-		MenuNoReader menuReader = new MenuNoReader();
+		IConsoleReader reader = new MenuNoReader();
 
 		do {
 			try {
-				// メニューの表示
 				ConsoleWriter.showMenu();
-				// メニュー番号の入力
-				String inputMenuNo = (String) menuReader.input();
-				menuNo = Integer.parseInt(inputMenuNo);
+
+				menuNo = (int) reader.input();
 				IEmployeeService service = IEmployeeService.getInstanceByMenuNo(menuNo);
 				// 機能の呼出
 				if (service != null) {
@@ -44,7 +43,7 @@ public class MainSystem {
 				e.printStackTrace();
 				break;
 			}
-		} while (menuNo != ConstantValue.SYSTEM_END_NUMBER);
+		} while (menuNo != SYSTEM_END_NUMBER);
 		ConsoleWriter.systemEnd();
 	}
 }

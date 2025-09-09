@@ -60,4 +60,10 @@ public class ConstantValue {
 
 	/** 部署ID3 */
 	public static final int DEPT_ID_THREE = 3;
+
+	/** 社員名の最小値 */
+	public static final int EMP_NAME_MIN = 1;
+
+	/** 社員名の最大値 */
+	public static final int EMP_NAME_MAX = 30;
 }

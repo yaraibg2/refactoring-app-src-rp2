@@ -1,21 +1,22 @@
 package jp.co.sss.crud.io;
 
+import static jp.co.sss.crud.util.ConstantMsg.*;
+
 public class MenuNoReader implements IConsoleReader {
 
 	@Override
 	public String getErrorMsg() {
-		return "1以上7以下の整数を入力してください";
+		return MENU_NO_VALID_MSG;
 	}
 
 	@Override
 	public boolean isValid(String inputString) {
-		return inputString.matches("^[1-7 １-７]$");
+		return inputString.matches(MENU_NO_VALID_VALUE);
 	}
 
 	@Override
 	public boolean isParseInt() {
-		// TODO 自動生成されたメソッド・スタブ
-		return false;
+		return true;
 	}
 
 }

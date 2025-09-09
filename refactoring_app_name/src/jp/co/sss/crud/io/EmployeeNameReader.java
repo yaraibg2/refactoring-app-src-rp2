@@ -1,15 +1,18 @@
 package jp.co.sss.crud.io;
 
+import static jp.co.sss.crud.util.ConstantMsg.*;
+import static jp.co.sss.crud.util.ConstantValue.*;
+
 public class EmployeeNameReader implements IConsoleReader {
 
 	@Override
 	public String getErrorMsg() {
-		return "1文字以上30文字以下の文字列を入力してください";
+		return EMP_NAME_VALID_MSG;
 	}
 
 	@Override
 	public boolean isValid(String inputString) {
-		return inputString.length() >= 1 && 30 >= inputString.length();
+		return inputString.length() >= EMP_NAME_MIN && EMP_NAME_MAX >= inputString.length();
 	}
 
 	@Override

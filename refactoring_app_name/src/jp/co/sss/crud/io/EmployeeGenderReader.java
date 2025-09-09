@@ -1,21 +1,22 @@
 package jp.co.sss.crud.io;
 
+import static jp.co.sss.crud.util.ConstantMsg.*;
+
 public class EmployeeGenderReader implements IConsoleReader {
 
 	@Override
 	public String getErrorMsg() {
-		return "0,1,2,または9の整数を入力してください";
+		return GENDER_VALID_MSG;
 	}
 
 	@Override
 	public boolean isValid(String inputString) {
-		return inputString.matches("^|[0129０１２９]{1}$");
+		return inputString.matches(GENDER_VALID_VALUE);
 	}
 
 	@Override
 	public boolean isParseInt() {
-		// TODO 自動生成されたメソッド・スタブ
-		return false;
+		return true;
 	}
 
 }

@@ -1,5 +1,7 @@
 package jp.co.sss.crud.service;
 
+import static jp.co.sss.crud.util.ConstantMsg.*;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,7 +13,6 @@ import jp.co.sss.crud.dto.Employee;
 import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
 import jp.co.sss.crud.io.ConsoleWriter;
-import jp.co.sss.crud.util.ConstantMsg;
 
 /**
  * 全件検索用のサービスクラス
@@ -52,11 +53,11 @@ public class EmployeeAllFindService implements IEmployeeService {
 				Employee employee = new Employee();
 				Department department = new Department();
 
-				employee.setEmpId(resultSet.getInt(ConstantMsg.RECORD_EMP_ID));
-				employee.setEmpName(resultSet.getString(ConstantMsg.RECORD_EMP_NAME));
-				employee.setGender(resultSet.getInt(ConstantMsg.RECORD_GENDER));
-				employee.setBirthday(resultSet.getString(ConstantMsg.RECORD_BIRTHDAY));
-				department.setDeptName(resultSet.getString(ConstantMsg.RECORD_DEPT_NAME));
+				employee.setEmpId(resultSet.getInt(RECORD_EMP_ID));
+				employee.setEmpName(resultSet.getString(RECORD_EMP_NAME));
+				employee.setGender(resultSet.getInt(RECORD_GENDER));
+				employee.setBirthday(resultSet.getString(RECORD_BIRTHDAY));
+				department.setDeptName(resultSet.getString(RECORD_DEPT_NAME));
 				employee.setDepartment(department);
 
 				employees.add(employee);
@@ -64,7 +65,7 @@ public class EmployeeAllFindService implements IEmployeeService {
 			return employees;
 
 		} catch (SQLException e) {
-			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
+			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
 		}
 	}
 }

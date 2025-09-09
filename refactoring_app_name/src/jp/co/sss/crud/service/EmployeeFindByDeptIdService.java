@@ -1,5 +1,7 @@
 package jp.co.sss.crud.service;
 
+import static jp.co.sss.crud.util.ConstantMsg.*;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
 import jp.co.sss.crud.io.ConsoleWriter;
 import jp.co.sss.crud.io.EmployeeDeptIdReader;
-import jp.co.sss.crud.util.ConstantMsg;
+import jp.co.sss.crud.io.IConsoleReader;
 
 /**
  * 主キー検索用のサービスクラス
@@ -26,14 +28,13 @@ public class EmployeeFindByDeptIdService implements IEmployeeService {
 	 */
 	@Override
 	public void execute() throws SystemErrorException, IllegalInputException {
-		EmployeeDeptIdReader employeeDeptIdReader = new EmployeeDeptIdReader();
+		IConsoleReader reader = new EmployeeDeptIdReader();
 		EmployeeDAO employeeDAO = new EmployeeDAO();
 		// 検索する部署IDを入力
-		System.out.print(ConstantMsg.FIND_BY_DEPT_ID);
-		String deptId = (String) employeeDeptIdReader.input();
+		System.out.print(FIND_BY_DEPT_ID);
+		int deptId = (int) reader.input();
 
-		int parsedDeptId = Integer.parseInt(deptId);
-		List<Employee> employees = employeeDAO.findByDeptId(parsedDeptId);
+		List<Employee> employees = employeeDAO.findByDeptId(deptId);
 
 		ConsoleWriter.showEmployees(employees);
 	}
@@ -57,18 +58,18 @@ public class EmployeeFindByDeptIdService implements IEmployeeService {
 				Employee employee = new Employee();
 				Department department = new Department();
 
-				employee.setEmpId(resultSet.getInt(ConstantMsg.RECORD_EMP_ID));
-				employee.setEmpName(resultSet.getString(ConstantMsg.RECORD_EMP_NAME));
-				employee.setGender(resultSet.getInt(ConstantMsg.RECORD_GENDER));
-				employee.setBirthday(resultSet.getString(ConstantMsg.RECORD_BIRTHDAY));
-				department.setDeptName(resultSet.getString(ConstantMsg.RECORD_DEPT_NAME));
+				employee.setEmpId(resultSet.getInt(RECORD_EMP_ID));
+				employee.setEmpName(resultSet.getString(RECORD_EMP_NAME));
+				employee.setGender(resultSet.getInt(RECORD_GENDER));
+				employee.setBirthday(resultSet.getString(RECORD_BIRTHDAY));
+				department.setDeptName(resultSet.getString(RECORD_DEPT_NAME));
 				employee.setDepartment(department);
 
 				employees.add(employee);
 			}
 			return employees;
 		} catch (SQLException e) {
-			throw new SystemErrorException(ConstantMsg.MSG_SYSTEM_ERROR, e);
+			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
 		}
 	}
 }

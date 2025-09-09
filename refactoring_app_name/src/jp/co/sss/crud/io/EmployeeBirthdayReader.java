@@ -1,5 +1,7 @@
 package jp.co.sss.crud.io;
 
+import static jp.co.sss.crud.util.ConstantMsg.*;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -7,12 +9,12 @@ public class EmployeeBirthdayReader implements IConsoleReader {
 
 	@Override
 	public String getErrorMsg() {
-		return "正しい形式(西暦年/月/日)で日付を入力してください";
+		return DATE_VALID_MSG;
 	}
 
 	@Override
 	public boolean isValid(String inputString) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 		sdf.setLenient(false);
 
 		try {
@@ -25,7 +27,6 @@ public class EmployeeBirthdayReader implements IConsoleReader {
 
 	@Override
 	public boolean isParseInt() {
-		// TODO 自動生成されたメソッド・スタブ
 		return false;
 	}
 
