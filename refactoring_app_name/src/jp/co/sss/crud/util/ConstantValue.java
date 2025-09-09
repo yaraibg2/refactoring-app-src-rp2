@@ -66,4 +66,7 @@ public class ConstantValue {
 
 	/** 社員名の最大値 */
 	public static final int EMP_NAME_MAX = 30;
+
+	/** 処理失敗時に帰ってくる値 */
+	public static final int FAILED = 0;
 }

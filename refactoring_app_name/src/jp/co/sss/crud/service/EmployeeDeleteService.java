@@ -1,6 +1,7 @@
 package jp.co.sss.crud.service;
 
 import static jp.co.sss.crud.util.ConstantMsg.*;
+import static jp.co.sss.crud.util.ConstantValue.*;
 
 import jp.co.sss.crud.db.EmployeeDAO;
 import jp.co.sss.crud.exception.IllegalInputException;
@@ -29,7 +30,7 @@ public class EmployeeDeleteService implements IEmployeeService {
 		int empId = (int) reader.input();
 		Integer isSuccess = employeeDAO.delete(empId);
 
-		if (isSuccess == 0) {
+		if (isSuccess == FAILED) {
 			ConsoleWriter.errorDeleteMsg();
 		} else {
 			ConsoleWriter.completeDeleteMsg();

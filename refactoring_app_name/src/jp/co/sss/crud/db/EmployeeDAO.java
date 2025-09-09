@@ -12,11 +12,7 @@ import java.util.List;
 
 import jp.co.sss.crud.dto.Employee;
 import jp.co.sss.crud.exception.SystemErrorException;
-import jp.co.sss.crud.service.EmployeeAllFindService;
-import jp.co.sss.crud.service.EmployeeFindByDeptIdService;
-import jp.co.sss.crud.service.EmployeeFindByEmpNameService;
-import jp.co.sss.crud.service.EmployeeRegisterService;
-import jp.co.sss.crud.service.EmployeeUpdateService;
+import jp.co.sss.crud.util.Convert;
 
 public class EmployeeDAO implements IEmployeeDAO {
 
@@ -25,9 +21,8 @@ public class EmployeeDAO implements IEmployeeDAO {
 		try (Connection connection = DBManager.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(SQL_ALL_SELECT);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
-			EmployeeAllFindService employeeAllFindService = new EmployeeAllFindService();
 
-			return employeeAllFindService.getAllRecord(resultSet);
+			return Convert.resultSetToEmployee(resultSet);
 
 		} catch (ClassNotFoundException | SQLException e) {
 			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
@@ -36,7 +31,6 @@ public class EmployeeDAO implements IEmployeeDAO {
 
 	@Override
 	public List<Employee> findByEmployeeName(String searchName) throws SystemErrorException {
-		EmployeeFindByEmpNameService employeeFindByEmpNameService = new EmployeeFindByEmpNameService();
 
 		try {
 			Connection connection = DBManager.getConnection();
@@ -52,7 +46,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 
 			try (connection; preparedStatement; resultSet) {
 
-				return employeeFindByEmpNameService.getRecordFindByName(resultSet);
+				return Convert.resultSetToEmployee(resultSet);
 			}
 		} catch (ClassNotFoundException | SQLException e) {
 			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
@@ -61,7 +55,6 @@ public class EmployeeDAO implements IEmployeeDAO {
 
 	@Override
 	public List<Employee> findByDeptId(int deptId) throws SystemErrorException {
-		EmployeeFindByDeptIdService employeeFindByDeptIdService = new EmployeeFindByDeptIdService();
 
 		try {
 			Connection connection = DBManager.getConnection();
@@ -77,7 +70,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 
 			try (connection; preparedStatement; resultSet) {
 
-				return employeeFindByDeptIdService.getRecordFindByDeptId(resultSet);
+				return Convert.resultSetToEmployee(resultSet);
 			}
 		} catch (ClassNotFoundException | SQLException e) {
 			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
@@ -86,11 +79,10 @@ public class EmployeeDAO implements IEmployeeDAO {
 
 	@Override
 	public void insert(Employee employee) throws SystemErrorException {
-		EmployeeRegisterService employeeRegisterService = new EmployeeRegisterService();
 
 		try (Connection connection = DBManager.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT)) {
-			employeeRegisterService.bindPreparedStatement(preparedStatement, employee);
+			Convert.bindPreparedStatement(preparedStatement, employee);
 			// SQL文を実行
 			preparedStatement.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -100,11 +92,10 @@ public class EmployeeDAO implements IEmployeeDAO {
 
 	@Override
 	public Integer update(Employee employee) throws SystemErrorException {
-		EmployeeUpdateService employeeUpdateService = new EmployeeUpdateService();
 
 		try (Connection connection = DBManager.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE)) {
-			employeeUpdateService.bindPreparedStatement(preparedStatement, employee);
+			Convert.bindPreparedStatement(preparedStatement, employee);
 			// SQL文の実行(失敗時は戻り値0)
 			return preparedStatement.executeUpdate();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -115,7 +106,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 	@Override
 	public Integer delete(Integer empId) throws SystemErrorException {
 		try (Connection connection = DBManager.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE);) {
+				PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE)) {
 			// 社員IDをバインド
 			preparedStatement.setInt(INDEX_ONE, empId);
 			// SQL文の実行(失敗時は戻り値0)

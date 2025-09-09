@@ -33,7 +33,7 @@ public class ConsoleWriter {
 	 * @param employees
 	 */
 	public static void showEmployees(List<Employee> employees) {
-		if (employees != null) {
+		if (!employees.isEmpty()) {
 			ConsoleWriter.showRecordHead();
 			employees.forEach(System.out::println);
 		} else {

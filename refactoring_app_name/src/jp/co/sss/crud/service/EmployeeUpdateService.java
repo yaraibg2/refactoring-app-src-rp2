@@ -3,14 +3,7 @@ package jp.co.sss.crud.service;
 import static jp.co.sss.crud.util.ConstantMsg.*;
 import static jp.co.sss.crud.util.ConstantValue.*;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import jp.co.sss.crud.db.EmployeeDAO;
-import jp.co.sss.crud.dto.Department;
 import jp.co.sss.crud.dto.Employee;
 import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
@@ -21,6 +14,7 @@ import jp.co.sss.crud.io.EmployeeEmpIdReader;
 import jp.co.sss.crud.io.EmployeeGenderReader;
 import jp.co.sss.crud.io.EmployeeNameReader;
 import jp.co.sss.crud.io.IConsoleReader;
+import jp.co.sss.crud.util.Convert;
 
 /**
  * 更新用のサービスクラス
@@ -46,7 +40,7 @@ public class EmployeeUpdateService implements IEmployeeService {
 		Employee employee = readLineAndsetField(empId);
 		Integer isSuccess = employeeDAO.update(employee);
 
-		if (isSuccess == 0) {
+		if (isSuccess == FAILED) {
 			ConsoleWriter.errorUpdateMsg();
 		} else {
 			ConsoleWriter.completeUpdateMsg();
@@ -65,65 +59,21 @@ public class EmployeeUpdateService implements IEmployeeService {
 
 		System.out.print(INPUT_EMP_NAME);
 		String empName = (String) reader.input();
-		// 性別を入力
+
 		System.out.print(INPUT_GENDER);
 		reader = new EmployeeGenderReader();
 		int gender = (int) reader.input();
-		// 誕生日を入力
+
 		System.out.print(INPUT_BIRTH_DAY);
 		reader = new EmployeeBirthdayReader();
 		String birthday = (String) reader.input();
 
-		// 部署IDを入力
 		System.out.print(UPDATE_DEPT_ID);
 		reader = new EmployeeDeptIdReader();
 		int deptId = (int) reader.input();
 
-		Employee employee = setDtoFields(empName, gender, birthday, deptId, empId);
+		Employee employee = Convert.setDtoFields(empName, gender, birthday, deptId, empId);
 
 		return employee;
-	}
-
-	/**
-	 * DTOに入力値をセットする
-	 * @param empName
-	 * @param gender
-	 * @param birthday
-	 * @param deptId
-	 * @param empId
-	 * @return Employee Dto
-	 */
-	private static Employee setDtoFields(String empName, int gender, String birthday, int deptId, int empId) {
-		Employee employee = new Employee();
-		Department department = new Department();
-		// 入力値をバインド	
-		employee.setEmpName(empName);
-		employee.setGender(gender);
-		employee.setBirthday(birthday);
-		department.setDeptId(deptId);
-		employee.setDepartment(department);
-		employee.setEmpId(empId);
-
-		return employee;
-	}
-
-	/**
-	 * PreparedStatementに入力値をバインド
-	 * @param preparedStatement
-	 * @param employee
-	 * @throws SystemErrorException
-	 */
-	public void bindPreparedStatement(PreparedStatement preparedStatement, Employee employee)
-			throws SystemErrorException {
-		try {
-			preparedStatement.setString(INDEX_ONE, employee.getEmpName());
-			preparedStatement.setInt(INDEX_TWO, employee.getGender());
-			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-			preparedStatement.setObject(INDEX_THREE, sdf.parse(employee.getBirthday()), Types.DATE);
-			preparedStatement.setInt(INDEX_FOUR, employee.getDepartment().getDeptId());
-			preparedStatement.setInt(INDEX_FIVE, employee.getEmpId());
-		} catch (SQLException | ParseException e) {
-			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
-		}
 	}
 }

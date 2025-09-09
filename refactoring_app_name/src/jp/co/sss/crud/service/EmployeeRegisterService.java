@@ -1,16 +1,8 @@
 package jp.co.sss.crud.service;
 
 import static jp.co.sss.crud.util.ConstantMsg.*;
-import static jp.co.sss.crud.util.ConstantValue.*;
-
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import jp.co.sss.crud.db.EmployeeDAO;
-import jp.co.sss.crud.dto.Department;
 import jp.co.sss.crud.dto.Employee;
 import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
@@ -20,6 +12,7 @@ import jp.co.sss.crud.io.EmployeeDeptIdReader;
 import jp.co.sss.crud.io.EmployeeGenderReader;
 import jp.co.sss.crud.io.EmployeeNameReader;
 import jp.co.sss.crud.io.IConsoleReader;
+import jp.co.sss.crud.util.Convert;
 
 /**
  * 新規登録用のサービスクラス
@@ -51,49 +44,9 @@ public class EmployeeRegisterService implements IEmployeeService {
 		reader = new EmployeeDeptIdReader();
 		int deptId = (int) reader.input();
 
-		Employee employee = setFields(empName, gender, birthday, deptId);
+		Employee employee = Convert.setDtoFields(empName, gender, birthday, deptId);
 		employeeDAO.insert(employee);
 
 		ConsoleWriter.completeInsertMsg();
-	}
-
-	/**
-	 * DTOに値をセット
-	 * @param empName
-	 * @param gender
-	 * @param birthday
-	 * @param deptId
-	 * @return Employee Dto
-	 */
-	public Employee setFields(String empName, int gender, String birthday, int deptId) {
-		Employee employee = new Employee();
-		Department department = new Department();
-		employee.setEmpName(empName);
-		employee.setGender(gender);
-		employee.setBirthday(birthday);
-		department.setDeptId(deptId);
-		employee.setDepartment(department);
-
-		return employee;
-	}
-
-	/**
-	 * PreparedStatementに値をバインド
-	 * @param preparedStatement
-	 * @param employee
-	 * @throws SystemErrorException
-	 */
-	public void bindPreparedStatement(PreparedStatement preparedStatement, Employee employee)
-			throws SystemErrorException {
-		try {
-			// 入力値をバインド
-			preparedStatement.setString(INDEX_ONE, employee.getEmpName());
-			preparedStatement.setInt(INDEX_TWO, employee.getGender());
-			SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-			preparedStatement.setObject(INDEX_THREE, sdf.parse(employee.getBirthday()), Types.DATE);
-			preparedStatement.setInt(INDEX_FOUR, employee.getDepartment().getDeptId());
-		} catch (SQLException | ParseException e) {
-			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
-		}
 	}
 }
