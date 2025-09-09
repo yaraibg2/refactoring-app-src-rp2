@@ -17,14 +17,13 @@ import jp.co.sss.crud.service.EmployeeFindByDeptIdService;
 import jp.co.sss.crud.service.EmployeeFindByEmpNameService;
 import jp.co.sss.crud.service.EmployeeRegisterService;
 import jp.co.sss.crud.service.EmployeeUpdateService;
-import jp.co.sss.crud.util.ConstantSQL;
 
 public class EmployeeDAO implements IEmployeeDAO {
 
 	@Override
 	public List<Employee> findAll() throws SystemErrorException {
 		try (Connection connection = DBManager.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(ConstantSQL.SQL_ALL_SELECT);
+				PreparedStatement preparedStatement = connection.prepareStatement(SQL_ALL_SELECT);
 				ResultSet resultSet = preparedStatement.executeQuery()) {
 			EmployeeAllFindService employeeAllFindService = new EmployeeAllFindService();
 
@@ -90,7 +89,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 		EmployeeRegisterService employeeRegisterService = new EmployeeRegisterService();
 
 		try (Connection connection = DBManager.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(ConstantSQL.SQL_INSERT)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT)) {
 			employeeRegisterService.bindPreparedStatement(preparedStatement, employee);
 			// SQL文を実行
 			preparedStatement.executeUpdate();
@@ -104,7 +103,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 		EmployeeUpdateService employeeUpdateService = new EmployeeUpdateService();
 
 		try (Connection connection = DBManager.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(ConstantSQL.SQL_UPDATE)) {
+				PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE)) {
 			employeeUpdateService.bindPreparedStatement(preparedStatement, employee);
 			// SQL文の実行(失敗時は戻り値0)
 			return preparedStatement.executeUpdate();
@@ -116,7 +115,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 	@Override
 	public Integer delete(Integer empId) throws SystemErrorException {
 		try (Connection connection = DBManager.getConnection();
-				PreparedStatement preparedStatement = connection.prepareStatement(ConstantSQL.SQL_DELETE);) {
+				PreparedStatement preparedStatement = connection.prepareStatement(SQL_DELETE);) {
 			// 社員IDをバインド
 			preparedStatement.setInt(INDEX_ONE, empId);
 			// SQL文の実行(失敗時は戻り値0)

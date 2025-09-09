@@ -98,9 +98,6 @@ public class ConstantMsg {
 	/** db用dept_nameレコード */
 	public static final String RECORD_DEPT_NAME = "dept_name";
 
-	/** 空白 */
-	public static final String SPACE = "\t";
-
 	/** 回答なし */
 	public static final String NO_ANSWER = "回答なし";
 

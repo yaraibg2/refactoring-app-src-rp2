@@ -26,8 +26,8 @@ public class Employee {
 			genderJapanese = GENDER_WOMAN;
 		}
 
-		return empId + SPACE + empName + SPACE
-				+ genderJapanese + SPACE + birthday + SPACE
+		return empId + "\t" + empName + "\t"
+				+ genderJapanese + "\t" + birthday + "\t"
 				+ department.getDeptName();
 	}
 
