@@ -3,9 +3,6 @@ package jp.co.sss.crud.service;
 import static jp.co.sss.crud.util.ConstantMsg.*;
 import static jp.co.sss.crud.util.ConstantValue.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -18,7 +15,11 @@ import jp.co.sss.crud.dto.Employee;
 import jp.co.sss.crud.exception.IllegalInputException;
 import jp.co.sss.crud.exception.SystemErrorException;
 import jp.co.sss.crud.io.ConsoleWriter;
+import jp.co.sss.crud.io.EmployeeBirthdayReader;
+import jp.co.sss.crud.io.EmployeeDeptIdReader;
 import jp.co.sss.crud.io.EmployeeEmpIdReader;
+import jp.co.sss.crud.io.EmployeeGenderReader;
+import jp.co.sss.crud.io.EmployeeNameReader;
 import jp.co.sss.crud.io.IConsoleReader;
 
 /**
@@ -40,13 +41,16 @@ public class EmployeeUpdateService implements IEmployeeService {
 		System.out.print(INPUT_UPDATE);
 
 		// 更新する値を入力する
-		String inputEmpId = (String) reader.input();
-		Integer.parseInt(inputEmpId);
+		int empId = (int) reader.input();
 
-		Employee employee = readLineAndsetField(inputEmpId);
-		employeeDAO.update(employee);
+		Employee employee = readLineAndsetField(empId);
+		Integer isSuccess = employeeDAO.update(employee);
 
-		ConsoleWriter.completeUpdateMsg();
+		if (isSuccess == 0) {
+			ConsoleWriter.errorUpdateMsg();
+		} else {
+			ConsoleWriter.completeUpdateMsg();
+		}
 	}
 
 	/**
@@ -54,30 +58,30 @@ public class EmployeeUpdateService implements IEmployeeService {
 	 * @param empId
 	 * @return Employee Dto
 	 * @throws SystemErrorException
+	 * @throws IllegalInputException 
 	 */
-	public Employee readLineAndsetField(String empId) throws SystemErrorException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	public Employee readLineAndsetField(int empId) throws SystemErrorException, IllegalInputException {
+		IConsoleReader reader = new EmployeeNameReader();
 
-		try {
-			System.out.print(INPUT_EMP_NAME);
-			String empName = br.readLine();
-			// 性別を入力
-			System.out.print(INPUT_GENDER);
-			String gender = br.readLine();
-			// 誕生日を入力
-			System.out.print(INPUT_BIRTH_DAY);
-			String birthday = br.readLine();
+		System.out.print(INPUT_EMP_NAME);
+		String empName = (String) reader.input();
+		// 性別を入力
+		System.out.print(INPUT_GENDER);
+		reader = new EmployeeGenderReader();
+		int gender = (int) reader.input();
+		// 誕生日を入力
+		System.out.print(INPUT_BIRTH_DAY);
+		reader = new EmployeeBirthdayReader();
+		String birthday = (String) reader.input();
 
-			// 部署IDを入力
-			System.out.print(UPDATE_DEPT_ID);
-			String deptId = br.readLine();
+		// 部署IDを入力
+		System.out.print(UPDATE_DEPT_ID);
+		reader = new EmployeeDeptIdReader();
+		int deptId = (int) reader.input();
 
-			Employee employee = setDtoFields(empName, gender, birthday, deptId, empId);
+		Employee employee = setDtoFields(empName, gender, birthday, deptId, empId);
 
-			return employee;
-		} catch (IOException e) {
-			throw new SystemErrorException(MSG_SYSTEM_ERROR, e);
-		}
+		return employee;
 	}
 
 	/**
@@ -89,16 +93,16 @@ public class EmployeeUpdateService implements IEmployeeService {
 	 * @param empId
 	 * @return Employee Dto
 	 */
-	private static Employee setDtoFields(String empName, String gender, String birthday, String deptId, String empId) {
+	private static Employee setDtoFields(String empName, int gender, String birthday, int deptId, int empId) {
 		Employee employee = new Employee();
 		Department department = new Department();
 		// 入力値をバインド	
 		employee.setEmpName(empName);
-		employee.setGender(Integer.parseInt(gender));
+		employee.setGender(gender);
 		employee.setBirthday(birthday);
-		department.setDeptId(Integer.parseInt(deptId));
+		department.setDeptId(deptId);
 		employee.setDepartment(department);
-		employee.setEmpId(Integer.parseInt(empId));
+		employee.setEmpId(empId);
 
 		return employee;
 	}

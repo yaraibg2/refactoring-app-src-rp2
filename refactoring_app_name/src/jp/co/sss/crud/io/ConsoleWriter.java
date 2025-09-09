@@ -76,7 +76,24 @@ public class ConsoleWriter {
 		System.out.println(COMPLETE_UPDATE);
 	}
 
+	/**
+	 * 更新処理失敗のメッセージ
+	 */
+	public static void errorUpdateMsg() {
+		System.out.println(UPDATE_ERROR);
+	}
+
+	/**
+	 * 削除処理完了のメッセージ
+	 */
 	public static void completeDeleteMsg() {
 		System.out.println(COMPLETE_DELETE);
+	}
+
+	/**
+	 * 削除処理失敗のメッセージ
+	 */
+	public static void errorDeleteMsg() {
+		System.out.println(DELETE_ERROR);
 	}
 }

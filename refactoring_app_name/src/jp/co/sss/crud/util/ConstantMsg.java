@@ -154,4 +154,10 @@ public class ConstantMsg {
 
 	/** メニュー番号の正規表現 */
 	public static final String MENU_NO_VALID_VALUE = "^[1-7 １-７]$";
+
+	/** 更新処理失敗時のメッセージ */
+	public static final String UPDATE_ERROR = "更新処理に失敗しました。";
+
+	/** 削除処理失敗時のメッセージ */
+	public static final String DELETE_ERROR = "削除処理に失敗しました。";
 }

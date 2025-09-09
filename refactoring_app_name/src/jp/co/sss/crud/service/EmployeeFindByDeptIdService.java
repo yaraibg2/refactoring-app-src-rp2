@@ -49,7 +49,6 @@ public class EmployeeFindByDeptIdService implements IEmployeeService {
 		try {
 			//resultSetの結果Setがない場合はnullを返す
 			if (!resultSet.isBeforeFirst()) {
-				ConsoleWriter.showNonExistTarget();
 				return null;
 			}
 

@@ -27,8 +27,12 @@ public class EmployeeDeleteService implements IEmployeeService {
 		System.out.print(INPUT_DELETE);
 
 		int empId = (int) reader.input();
-		employeeDAO.delete(empId);
+		Integer isSuccess = employeeDAO.delete(empId);
 
-		ConsoleWriter.completeDeleteMsg();
+		if (isSuccess == 0) {
+			ConsoleWriter.errorDeleteMsg();
+		} else {
+			ConsoleWriter.completeDeleteMsg();
+		}
 	}
 }
